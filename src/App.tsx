@@ -1,26 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Header from "./components/Header";
+import styles from "./App.module.scss";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [darkMode, setDarkMode] = useState(false);
+
+	return (
+		<div className={`${styles["App"]} ${darkMode ? styles["dark"] : styles["ligth"]}`}>
+			<Header darkMode={darkMode} setDarkMode={setDarkMode} />
+		</div>
+	);
 }
 
 export default App;

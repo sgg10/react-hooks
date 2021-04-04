@@ -1,7 +1,8 @@
-import { useEffect, useState, useReducer, useMemo, useRef } from "react";
+import { useEffect, useState, useReducer, useMemo, useRef, useCallback } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Mood, MoodBad, HelpOutline } from "@material-ui/icons/";
-import { Grid, TextField } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
+import Search from "../Search";
 import Card from "../Common/Card";
 
 const initialState = {
@@ -37,9 +38,12 @@ const Characters = () => {
 		else dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
 	};
 
-	const handleSearch = () => {
+	// const handleSearch = () => {
+	// 	setSeacrh(searchInput.current.children[1].children[0].value);
+	// };
+	const HandleSearch = useCallback(() => {
 		setSeacrh(searchInput.current.children[1].children[0].value);
-	};
+	}, []);
 
 	const renderStatus = (status: string) => {
 		switch (status) {
@@ -103,10 +107,7 @@ const Characters = () => {
 					))}
 				</Grid>
 			)}
-			<Grid container direction='row' justify='center' alignItems='center'>
-				<TextField label='Search' ref={searchInput} variant='outlined' style={{ width: "90%" }} value={search} onChange={handleSearch} />
-				{/* <input placeholder='Search' ref={searchInput} style={{ width: "90%" }} value={search} onChange={handleSearch} /> */}
-			</Grid>
+			<Search search={search} searchInput={searchInput} handleSearch={HandleSearch} />
 			<Grid container direction='row' justify='center' alignItems='center' className='Characters'>
 				{characters.length ? (
 					filteredCharacters.map((character) => (

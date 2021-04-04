@@ -1,13 +1,16 @@
-import { useEffect, useState, useReducer, useMemo, useRef, useCallback } from "react";
+import { useState, useReducer, useMemo, useRef, useCallback } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Mood, MoodBad, HelpOutline } from "@material-ui/icons/";
 import { Grid } from "@material-ui/core";
 import Search from "../Search";
 import Card from "../Common/Card";
+import useCharacters from "../../hooks/useCharacters";
 
 const initialState = {
 	favorites: [],
 };
+
+const API = "https://rickandmortyapi.com/api/character/";
 
 const favoriteReducer = (state: any, action: any) => {
 	switch (action.type) {
@@ -22,16 +25,11 @@ const favoriteReducer = (state: any, action: any) => {
 };
 
 const Characters = () => {
-	const [characters, setCharacters] = useState([]);
 	const [{ favorites }, dispatch] = useReducer(favoriteReducer, initialState);
 	const [search, setSeacrh] = useState("");
 	const searchInput = useRef<HTMLInputElement | any>("");
 
-	const getCharacters = async () => {
-		const response = await fetch("https://rickandmortyapi.com/api/character");
-		const data = await response.json();
-		setCharacters(data.results);
-	};
+	const characters = useCharacters(API);
 
 	const handleClick = (favorite: any) => {
 		if (favorites.includes(favorite)) dispatch({ type: "REMOVE_FROM_FAVORITE", payload: favorite });
@@ -84,10 +82,6 @@ const Characters = () => {
 				break;
 		}
 	};
-
-	useEffect(() => {
-		getCharacters();
-	}, []);
 
 	// const filteredCharacters = characters.filter((character: any) => character["name"].toLowerCase().includes(search.toLowerCase()));
 

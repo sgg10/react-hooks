@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer, useMemo } from "react";
+import { useEffect, useState, useReducer, useMemo, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Mood, MoodBad, HelpOutline } from "@material-ui/icons/";
 import { Grid, TextField } from "@material-ui/core";
@@ -24,6 +24,7 @@ const Characters = () => {
 	const [characters, setCharacters] = useState([]);
 	const [{ favorites }, dispatch] = useReducer(favoriteReducer, initialState);
 	const [search, setSeacrh] = useState("");
+	const searchInput = useRef<HTMLInputElement | any>("");
 
 	const getCharacters = async () => {
 		const response = await fetch("https://rickandmortyapi.com/api/character");
@@ -36,7 +37,9 @@ const Characters = () => {
 		else dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
 	};
 
-	const handleSearch = (event: any) => setSeacrh(event.target["value"]);
+	const handleSearch = () => {
+		setSeacrh(searchInput.current.children[1].children[0].value);
+	};
 
 	const renderStatus = (status: string) => {
 		switch (status) {
@@ -101,7 +104,8 @@ const Characters = () => {
 				</Grid>
 			)}
 			<Grid container direction='row' justify='center' alignItems='center'>
-				<TextField label='Search' variant='outlined' style={{ width: "90%" }} value={search} onChange={handleSearch} />
+				<TextField label='Search' ref={searchInput} variant='outlined' style={{ width: "90%" }} value={search} onChange={handleSearch} />
+				{/* <input placeholder='Search' ref={searchInput} style={{ width: "90%" }} value={search} onChange={handleSearch} /> */}
 			</Grid>
 			<Grid container direction='row' justify='center' alignItems='center' className='Characters'>
 				{characters.length ? (

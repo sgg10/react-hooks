@@ -1,7 +1,7 @@
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useMemo } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Mood, MoodBad, HelpOutline } from "@material-ui/icons/";
-import { Grid } from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
 import Card from "../Common/Card";
 
 const initialState = {
@@ -23,6 +23,7 @@ const favoriteReducer = (state: any, action: any) => {
 const Characters = () => {
 	const [characters, setCharacters] = useState([]);
 	const [{ favorites }, dispatch] = useReducer(favoriteReducer, initialState);
+	const [search, setSeacrh] = useState("");
 
 	const getCharacters = async () => {
 		const response = await fetch("https://rickandmortyapi.com/api/character");
@@ -34,6 +35,8 @@ const Characters = () => {
 		if (favorites.includes(favorite)) dispatch({ type: "REMOVE_FROM_FAVORITE", payload: favorite });
 		else dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
 	};
+
+	const handleSearch = (event: any) => setSeacrh(event.target["value"]);
 
 	const renderStatus = (status: string) => {
 		switch (status) {
@@ -79,6 +82,13 @@ const Characters = () => {
 		getCharacters();
 	}, []);
 
+	// const filteredCharacters = characters.filter((character: any) => character["name"].toLowerCase().includes(search.toLowerCase()));
+
+	const filteredCharacters = useMemo(() => characters.filter((character: any) => character["name"].toLowerCase().includes(search.toLowerCase())), [
+		characters,
+		search,
+	]);
+
 	return (
 		<>
 			{favorites && (
@@ -90,9 +100,12 @@ const Characters = () => {
 					))}
 				</Grid>
 			)}
+			<Grid container direction='row' justify='center' alignItems='center'>
+				<TextField label='Search' variant='outlined' style={{ width: "90%" }} value={search} onChange={handleSearch} />
+			</Grid>
 			<Grid container direction='row' justify='center' alignItems='center' className='Characters'>
 				{characters.length ? (
-					characters.map((character) => (
+					filteredCharacters.map((character) => (
 						<Grid key={character["id"]} item xs={12} md={3} sm={8} lg={3}>
 							<Card
 								setFavorite={() => handleClick(character)}

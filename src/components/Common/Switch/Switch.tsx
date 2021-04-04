@@ -1,6 +1,6 @@
 import { withStyles } from "@material-ui/core/styles";
 import { purple } from "@material-ui/core/colors";
-import { default as MaterialSwitch, SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
+import { default as MaterialSwitch } from "@material-ui/core/Switch";
 
 const Switch = withStyles({
 	switchBase: {

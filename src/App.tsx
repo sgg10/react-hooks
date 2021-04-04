@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Header from "./components/Header";
 import Characters from "./components/Characters";
 import styles from "./App.module.scss";
+import ThemeContext from "./context/ThemeContext";
 
 function App() {
-	const [darkMode, setDarkMode] = useState(true);
+	const { theme } = useContext(ThemeContext);
 
 	return (
-		<div className={`${styles["App"]} ${darkMode ? styles["dark"] : styles["ligth"]}`}>
-			<Header darkMode={darkMode} setDarkMode={setDarkMode} />
+		<div className={`${styles["App"]} ${theme ? styles["dark"] : styles["ligth"]}`}>
+			<Header />
 			<Characters />
 		</div>
 	);

@@ -4,6 +4,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+import { FavoriteBorderOutlined, FavoriteOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles({
 	root: {
@@ -19,22 +20,29 @@ interface CardProps {
 	photo: string;
 	title: string;
 	description?: any;
+	setFavorite?: any;
+	inList?: boolean;
 }
 
-export default function Card({ photo, title, description }: CardProps) {
+export default function Card({ photo, title, description, setFavorite, inList }: CardProps) {
 	const classes = useStyles();
 
 	return (
 		<MaterialCard className={classes.root}>
-			<CardActionArea>
-				<CardMedia className={classes.media} image={photo} title={title} />
-				<CardContent>
-					<Typography gutterBottom variant='h5' component='h2'>
-						{title}
-					</Typography>
-					{description}
-				</CardContent>
-			</CardActionArea>
+			<CardMedia className={classes.media} image={photo} title={title} />
+			<CardContent>
+				<Typography gutterBottom variant='h5' component='h2'>
+					{title}
+				</Typography>
+				<div>{description}</div>
+				<div onClick={setFavorite}>
+					{inList ? (
+						<FavoriteOutlined style={{ color: "red", cursor: "pointer" }} />
+					) : (
+						<FavoriteBorderOutlined style={{ color: "red", cursor: "pointer" }} />
+					)}
+				</div>
+			</CardContent>
 		</MaterialCard>
 	);
 }
